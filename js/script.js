@@ -1,10 +1,32 @@
 window.onload = InitApp;
+
 function InitApp() {
-  for (var i = 0; i < document.getElementsByTagName('button').length; i++) {
-    document.getElementsByTagName('button')[i].onclick = EnterFigure;
+
+  var inputDisplay = document.getElementsByClassName('input')[0];
+  var allButtons = document.getElementsByTagName('button');
+  var deleteBtn = document.getElementById('delete');
+  var resetBtn = document.getElementById('reset');
+  var calculateBtn = document.getElementById('equals');
+
+  inputDisplay.innerHTML = "0";
+  for (var i = 0; i < allButtons.length; i++) {
+    if (allButtons[i].hasAttribute('name')) {
+      allButtons[i].onclick = function () {
+        if (inputDisplay.innerHTML == "0" && this.name != ".") {
+          inputDisplay.innerHTML = "";
+        }
+        inputDisplay.innerHTML += this.name;
+      };
+    }
   }
-  function EnterFigure() {
-    if (this.hasAttribute('name'))
-      document.getElementsByClassName('input')[0].innerHTML += this.name;
+  deleteBtn.onclick = function () {
+    if (inputDisplay.innerHTML != "0")
+      inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 1);
+      if(inputDisplay.innerHTML == ""){
+        inputDisplay.innerHTML = "0";
+      }
+  }
+  resetBtn.onclick = function () {
+    inputDisplay.innerHTML = "0";
   }
 }
