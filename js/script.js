@@ -12,21 +12,27 @@ function InitApp() {
   for (var i = 0; i < allButtons.length; i++) {
     if (allButtons[i].hasAttribute('name')) {
       allButtons[i].onclick = function () {
-        if (inputDisplay.innerHTML == "0" && this.name != ".") {
+        if (inputDisplay.innerHTML == "0" && ".*-/+".indexOf(this.name) < 0) {
           inputDisplay.innerHTML = "";
         }
         inputDisplay.innerHTML += this.name;
       };
     }
   }
+
   deleteBtn.onclick = function () {
     if (inputDisplay.innerHTML != "0")
       inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 1);
-      if(inputDisplay.innerHTML == ""){
-        inputDisplay.innerHTML = "0";
-      }
+    if (inputDisplay.innerHTML == "") {
+      inputDisplay.innerHTML = "0";
+    }
   }
+
   resetBtn.onclick = function () {
     inputDisplay.innerHTML = "0";
+  }
+
+  calculateBtn.onclick = function(){
+    
   }
 }
