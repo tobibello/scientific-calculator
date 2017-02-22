@@ -2,68 +2,67 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>My Calculator</title>
-    <meta name="description" content="A class assignment for CSC405 at the University of Lagos."/>
-    <meta name="author" content="Tobi Bello"/>
-    <link href="css/normalize.css" rel="stylesheet"/>
-    <link href="css/styles.css" rel="stylesheet"/>
+  <meta charset="UTF-8">
+  <title>My Calculator</title>
+  <meta name="description" content="A class assignment for CSC405 at the University of Lagos." />
+  <meta name="author" content="Tobi Bello" />
+  <link href="css/normalize.css" rel="stylesheet" />
+  <link href="css/styles.css" rel="stylesheet" />
+  <script src="js/script.js"></script>
 </head>
 
 <body>
 
-    <div class="wrap">
-        <header>
-            <h1>My Calculator</h1>
-        </header>
-        <section class="calculator">
-            <table>
-                <thead>
-                    <tr>
-                        <td colspan="5">
-                            <div class="input"></div>
-                            <div class="result"></div>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><button onclick="">7</button></td>
-                        <td><button onclick="">8</button></td>
-                        <td><button onclick="">9</button></td>
-                        <td><button onclick="">DEL</button></td>
-                        <td><button onclick="">AC</button></td>
-                    </tr>
-                    <tr>
-                        <td><button onclick="">4</button></td>
-                        <td><button onclick="">5</button></td>
-                        <td><button onclick="">6</button></td>
-                        <td><button onclick="">*</button></td>
-                        <td><button onclick="">/</button></td>
-                    </tr>
-                    <tr>
-                        <td><button onclick="">1</button></td>
-                        <td><button onclick="">2</button></td>
-                        <td><button onclick="">3</button></td>
-                        <td><button onclick="">+</button></td>
-                        <td><button onclick="">-</button></td>
-                    </tr>
-                    <tr>
-                        <td><button onclick="">0</button></td>
-                        <td><button onclick="">.</button></td>
-                        <td><button onclick="">EXP</button></td>
-                        <td><button onclick="">Ans</button></td>
-                        <td><button onclick="">=</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-        <footer>
+  <div class="wrap">
+    <header>
+      <h1>My Calculator</h1>
+    </header>
+    <section class="calculator">
+      <table>
+        <thead>
+          <tr>
+            <td colspan="5">
+              <div class="input"></div>
+              <div class="result"></div>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><button name="7">7</button></td>
+            <td><button name="8">8</button></td>
+            <td><button name="9">9</button></td>
+            <td><button>DEL</button></td>
+            <td><button>AC</button></td>
+          </tr>
+          <tr>
+            <td><button name="4">4</button></td>
+            <td><button name="5">5</button></td>
+            <td><button name="6">6</button></td>
+            <td><button name="*">*</button></td>
+            <td><button name="/">/</button></td>
+          </tr>
+          <tr>
+            <td><button name="1">1</button></td>
+            <td><button name="2">2</button></td>
+            <td><button name="3">3</button></td>
+            <td><button iname"+">+</button></td>
+            <td><button name="-">-</button></td>
+          </tr>
+          <tr>
+            <td><button name="0">0</button></td>
+            <td><button name=".">.</button></td>
+            <td><button name="x10">EXP</button></td>
+            <td><button name="Ans">Ans</button></td>
+            <td><button>=</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    <footer>
 
-        </footer>
-    </div>
-
-    <script type="text/javascript" src="script.js"></script>
+    </footer>
+  </div>
 </body>
 
 </html>
