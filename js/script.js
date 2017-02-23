@@ -9,20 +9,28 @@ function InitApp() {
   var resetBtn = document.getElementById('reset');
   var calculateBtn = document.getElementById('equals');
 
-  inputDisplay.innerHTML = "0";
+  inputDisplay.innerHTML = "";
   var tokens = ["0"];
   var Ans = 0;
+  var flag = false;
 
   for (var i = 0; i < allButtons.length; i++) {
     if (allButtons[i].hasAttribute('name')) {
       allButtons[i].onclick = function () {
         var peek = this.name;
-        if (inputDisplay.innerHTML == "0" && ".*-/+".indexOf(peek) < 0) {
+        /*if (inputDisplay.innerHTML == "0" && ".*-/+".indexOf(peek) < 0) {
           inputDisplay.innerHTML = "";
+        } else */
+        if (flag) {
+          inputDisplay.innerHTML = "";
+          tokens = [];
+          flag = false;
         }
         inputDisplay.innerHTML += peek;
 
-        if ((!isNaN(parseInt(peek)) || peek == '.') && tokens.length > 0 && !isNaN(parseInt(tokens[tokens.length - 1]))) {
+        if ((!isNaN(parseInt(peek)) || peek == '.')
+          && tokens.length > 0
+          && (!isNaN(parseInt(tokens[tokens.length - 1])) || tokens[tokens.length - 1] == '.')) {
           var last = tokens.pop();
           tokens.push(last + peek);
         } else {
@@ -51,10 +59,11 @@ function InitApp() {
   }
 
   resetBtn.onclick = function () {
-    inputDisplay.innerHTML = "0";
-    resultDisplay.innerHTML="";
-    tokens = [];
+    inputDisplay.innerHTML = "";
+    resultDisplay.innerHTML = "";
+    tokens = ['0'];
     Ans = 0;
+    flag = false;
   }
 
   calculateBtn.onclick = function () {
@@ -85,6 +94,8 @@ function InitApp() {
     }
     catch (err) {
       resultDisplay.innerHTML = err;
+    } finally {
+      flag = true;
     }
 
     function Expr() {
@@ -161,6 +172,10 @@ function InitApp() {
         stack.push(firstOperand * Math.pow(10, secondOperand));
       }
     }
+  }
+
+  inputDisplay.onclick = function () {
+    flag = false;
   }
 }
 
