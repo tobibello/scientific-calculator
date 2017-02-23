@@ -3,21 +3,31 @@ window.onload = InitApp;
 function InitApp() {
 
   var inputDisplay = document.getElementsByClassName('input')[0];
+  var resultDisplay = document.getElementsByClassName('result')[0];
   var allButtons = document.getElementsByTagName('button');
   var deleteBtn = document.getElementById('delete');
   var resetBtn = document.getElementById('reset');
   var calculateBtn = document.getElementById('equals');
 
   inputDisplay.innerHTML = "0";
-  var tokens = [];
+  var tokens = ["0"];
+  var Ans = 0;
+
   for (var i = 0; i < allButtons.length; i++) {
     if (allButtons[i].hasAttribute('name')) {
       allButtons[i].onclick = function () {
-        if (inputDisplay.innerHTML == "0" && ".*-/+".indexOf(this.name) < 0) {
+        var peek = this.name;
+        if (inputDisplay.innerHTML == "0" && ".*-/+".indexOf(peek) < 0) {
           inputDisplay.innerHTML = "";
         }
-        inputDisplay.innerHTML += this.name;
-        tokens.push(this.name);
+        inputDisplay.innerHTML += peek;
+
+        if ((!isNaN(parseInt(peek)) || peek == '.') && tokens.length > 0 && !isNaN(parseInt(tokens[tokens.length - 1]))) {
+          var last = tokens.pop();
+          tokens.push(last + peek);
+        } else {
+          tokens.push(peek);
+        }
       };
     }
   }
@@ -25,10 +35,15 @@ function InitApp() {
   deleteBtn.onclick = function () {
     if (inputDisplay.innerHTML != "0") {
       var deleted = tokens.pop();
-      if (deleted == 'Ans' || deleted == 'x10')
+      if (deleted == 'Ans' || deleted == 'x10') {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 3);
-      else
+      }
+      else {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 1);
+        if (!isNaN(parseInt(deleted)) && deleted.length > 1) {
+          tokens.push(deleted.slice(0, deleted.length - 1));
+        }
+      }
     }
     else if (inputDisplay.innerHTML == "") {
       inputDisplay.innerHTML = "0";
@@ -37,12 +52,14 @@ function InitApp() {
 
   resetBtn.onclick = function () {
     inputDisplay.innerHTML = "0";
+    resultDisplay.innerHTML="";
     tokens = [];
+    Ans = 0;
   }
 
   calculateBtn.onclick = function () {
     var tokensEnumerator = MakeEnumerable(tokens).getEnumerator();
-    var MakeEnumerable = function (items) {
+    function MakeEnumerable(items) {
       counter = -1;
       return {
         enumerator: {
@@ -59,14 +76,15 @@ function InitApp() {
         }
       };
     };
-    var i = 0;
     var lookahead = tokensEnumerator.moveNext() ? tokensEnumerator.getCurrent() : "</>";
+    var stack = [];
     try {
       Expr();
-      return lookahead == "</>";
+      Ans = stack.pop()
+      resultDisplay.innerHTML = lookahead == "</>" ? Ans : err;
     }
     catch (err) {
-      return false;
+      resultDisplay.innerHTML = err;
     }
 
     function Expr() {
@@ -75,10 +93,12 @@ function InitApp() {
         if (lookahead == '+') {
           Match('+');
           Term();
+          Solve('+');
         }
         else if (lookahead == '-') {
           Match('-');
           Term();
+          Solve('-');
         }
         else return;
       }
@@ -90,21 +110,26 @@ function InitApp() {
         if (lookahead == '*') {
           Match('*');
           Factor();
+          Solve('*');
         }
         else if (lookahead == '/') {
           Match('/');
           Factor();
+          Solve('/');
         }
-        // else if (lookahead == '^') {
-        //   Match('^');
-        //   Factor();
-        // }
+        else if (lookahead == 'x10') {
+          Match('x10');
+          Factor();
+          Solve('x10');
+        }
         else return;
       }
     }
 
     function Factor() {
-      if (!isNaN(parseInt(lookahead)) || lookahead == "Ans") {
+      var intlookahead = parseFloat(lookahead);
+      if (!isNaN(intlookahead) || lookahead == "Ans") {
+        stack.push(lookahead == "Ans" ? Ans : intlookahead);
         Match(lookahead);
       }
       // else if (lookahead.tag == '(') {
@@ -120,10 +145,24 @@ function InitApp() {
         lookahead = tokensEnumerator.moveNext() ? tokensEnumerator.getCurrent() : "</>";
       } else throw "Syntax Error";
     }
+
+    function Solve(operator) {
+      var secondOperand = stack.pop();
+      var firstOperand = stack.pop();
+      if (operator == '+') {
+        stack.push(firstOperand + secondOperand);
+      } else if (operator == '-') {
+        stack.push(firstOperand - secondOperand);
+      } else if (operator == '*') {
+        stack.push(firstOperand * secondOperand);
+      } else if (operator == '/') {
+        stack.push(firstOperand / secondOperand);
+      } else if (operator == 'x10') {
+        stack.push(firstOperand * Math.pow(10, secondOperand));
+      }
+    }
   }
 }
-
-
 
 
 /*
