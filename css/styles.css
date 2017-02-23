@@ -45,27 +45,33 @@ table, th, td {
 table{
     width: 300px;
     margin: auto;
-    text-align: center;
 }
 
 thead td{
     height: 100px;
 }
 
-.input{
+div.input{
     height: 40%;
     font-family: 'Press Start 2P', cursive;
+    text-align: left;
+    padding:10px;
 }
 
 .result{
     height: 60%;
     font-family: 'Cousine', monospace;
+    font-size: 2em;
+    text-align: right;
+    padding: 13px;
 }
+
 
 tbody td{
     width: 20%;
     height: 40px;
     padding:0;
+    text-align: center;
 }
 
 tbody button{
