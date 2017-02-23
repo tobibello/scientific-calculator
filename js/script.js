@@ -41,8 +41,85 @@ function InitApp() {
   }
 
   calculateBtn.onclick = function () {
-    var expression = inputDisplay.innerHTML;
+    var tokensEnumerator = MakeEnumerable(tokens).getEnumerator();
+    var MakeEnumerable = function (items) {
+      counter = -1;
+      return {
+        enumerator: {
+          moveNext: function () {
+            counter++;
+            return counter < items.length;
+          },
+          getCurrent: function () {
+            return items[counter];
+          }
+        },
+        getEnumerator: function () {
+          return this.enumerator;
+        }
+      };
+    };
+    var i = 0;
+    var lookahead = tokensEnumerator.moveNext() ? tokensEnumerator.getCurrent() : "</>";
+    try {
+      Expr();
+      return lookahead == "</>";
+    }
+    catch (err) {
+      return false;
+    }
 
+    function Expr() {
+      Term();
+      while (true) {
+        if (lookahead == '+') {
+          Match('+');
+          Term();
+        }
+        else if (lookahead == '-') {
+          Match('-');
+          Term();
+        }
+        else return;
+      }
+    }
+
+    function Term() {
+      Factor();
+      while (true) {
+        if (lookahead == '*') {
+          Match('*');
+          Factor();
+        }
+        else if (lookahead == '/') {
+          Match('/');
+          Factor();
+        }
+        // else if (lookahead == '^') {
+        //   Match('^');
+        //   Factor();
+        // }
+        else return;
+      }
+    }
+
+    function Factor() {
+      if (!isNaN(parseInt(lookahead)) || lookahead == "Ans") {
+        Match(lookahead);
+      }
+      // else if (lookahead.tag == '(') {
+      //   Match('(');
+      //   Expression();
+      //   Match(')');
+      // } 
+      else throw "Syntax Error";
+    }
+
+    function Match(t) {
+      if (lookahead == t) {
+        lookahead = tokensEnumerator.moveNext() ? tokensEnumerator.getCurrent() : "</>";
+      } else throw "Syntax Error";
+    }
   }
 }
 
