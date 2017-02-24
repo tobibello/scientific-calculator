@@ -10,6 +10,7 @@ function InitApp() {
   var calculateBtn = document.getElementById('equals');
 
   inputDisplay.innerHTML = "";
+  inputDisplay.style.backgroundColor = '#86a2a5';
   var tokens = ["0"];
   var Ans = 0;
   var flag = false;
@@ -18,13 +19,11 @@ function InitApp() {
     if (allButtons[i].hasAttribute('name')) {
       allButtons[i].onclick = function () {
         var peek = this.name;
-        /*if (inputDisplay.innerHTML == "0" && ".*-/+".indexOf(peek) < 0) {
-          inputDisplay.innerHTML = "";
-        } else */
         if (flag) {
           inputDisplay.innerHTML = "";
           tokens = [];
           flag = false;
+          inputDisplay.style.backgroundColor = '#86a2a5';
         }
         inputDisplay.innerHTML += peek;
 
@@ -33,7 +32,11 @@ function InitApp() {
           && (!isNaN(parseInt(tokens[tokens.length - 1])) || tokens[tokens.length - 1] == '.')) {
           var last = tokens.pop();
           tokens.push(last + peek);
-        } else {
+        }
+        else {
+          if (tokens.length == 1 && tokens[0] == '0') {
+            tokens.pop();
+          }
           tokens.push(peek);
         }
       };
@@ -41,10 +44,12 @@ function InitApp() {
   }
 
   deleteBtn.onclick = function () {
-    if (inputDisplay.innerHTML != "0") {
+    if (inputDisplay.innerHTML != "" && !flag) {
       var deleted = tokens.pop();
-      if (deleted == 'Ans' || deleted == 'x10') {
+      if (deleted == 'Ans') {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 3);
+      } else if (deleted == '<sub>x10^</sub>') {
+        inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 4);
       }
       else {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 1);
@@ -52,9 +57,6 @@ function InitApp() {
           tokens.push(deleted.slice(0, deleted.length - 1));
         }
       }
-    }
-    else if (inputDisplay.innerHTML == "") {
-      inputDisplay.innerHTML = "0";
     }
   }
 
@@ -64,6 +66,7 @@ function InitApp() {
     tokens = ['0'];
     Ans = 0;
     flag = false;
+    inputDisplay.style.backgroundColor = '#86a2a5';
   }
 
   calculateBtn.onclick = function () {
@@ -89,13 +92,14 @@ function InitApp() {
     var stack = [];
     try {
       Expr();
-      Ans = stack.pop()
+      if (stack.length > 0) Ans = stack.pop(); else throw 'Unexpected Error';
       resultDisplay.innerHTML = lookahead == "</>" ? Ans : err;
     }
     catch (err) {
       resultDisplay.innerHTML = err;
     } finally {
       flag = true;
+      inputDisplay.style.backgroundColor = '#9AB7BB';
     }
 
     function Expr() {
@@ -128,10 +132,10 @@ function InitApp() {
           Factor();
           Solve('/');
         }
-        else if (lookahead == 'x10') {
-          Match('x10');
+        else if (lookahead == '<sub>x10^</sub>') {
+          Match('<sub>x10^</sub>');
           Factor();
-          Solve('x10');
+          Solve('<sub>x10^</sub>');
         }
         else return;
       }
@@ -143,11 +147,11 @@ function InitApp() {
         stack.push(lookahead == "Ans" ? Ans : intlookahead);
         Match(lookahead);
       }
-      // else if (lookahead.tag == '(') {
-      //   Match('(');
-      //   Expression();
-      //   Match(')');
-      // } 
+      else if (lookahead == '(') {
+        Match('(');
+        Expr();
+        Match(')');
+      }
       else throw "Syntax Error";
     }
 
@@ -160,22 +164,20 @@ function InitApp() {
     function Solve(operator) {
       var secondOperand = stack.pop();
       var firstOperand = stack.pop();
-      if (operator == '+') {
-        stack.push(firstOperand + secondOperand);
-      } else if (operator == '-') {
-        stack.push(firstOperand - secondOperand);
-      } else if (operator == '*') {
-        stack.push(firstOperand * secondOperand);
-      } else if (operator == '/') {
-        stack.push(firstOperand / secondOperand);
-      } else if (operator == 'x10') {
-        stack.push(firstOperand * Math.pow(10, secondOperand));
+      switch (operator) {
+        case '+': stack.push(firstOperand + secondOperand); break;
+        case '-': stack.push(firstOperand - secondOperand); break;
+        case '*': stack.push(firstOperand * secondOperand); break;
+        case '/': stack.push(firstOperand / secondOperand); break;
+        case '<sub>x10^</sub>': stack.push(firstOperand * Math.pow(10, secondOperand)); break;
+        default: throw 'Invalid Operator';
       }
     }
   }
 
   inputDisplay.onclick = function () {
     flag = false;
+    inputDisplay.style.backgroundColor = '#86a2a5';
   }
 }
 
