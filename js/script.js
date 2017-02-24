@@ -11,7 +11,7 @@ function InitApp() {
 
   inputDisplay.innerHTML = "";
   inputDisplay.style.backgroundColor = '#86a2a5';
-  var tokens = ["0"];
+  var tokens = ['0'];
   var Ans = 0;
   var flag = false;
 
@@ -21,15 +21,14 @@ function InitApp() {
         var peek = this.name;
         if (flag) {
           inputDisplay.innerHTML = "";
-          tokens = [];
+          tokens = ['0'];
           flag = false;
           inputDisplay.style.backgroundColor = '#86a2a5';
         }
         inputDisplay.innerHTML += peek;
-
-        if ((!isNaN(parseInt(peek)) || peek == '.')
+        if (((!isNaN(parseInt(peek)) || peek == '.') && peek != "10^(")
           && tokens.length > 0
-          && (!isNaN(parseInt(tokens[tokens.length - 1])) || tokens[tokens.length - 1] == '.')) {
+          && ((!isNaN(parseInt(tokens[tokens.length - 1])) || tokens[tokens.length - 1] == '.') && tokens[tokens.length - 1] != "10^(")) {
           var last = tokens.pop();
           tokens.push(last + peek);
         }
@@ -46,9 +45,9 @@ function InitApp() {
   deleteBtn.onclick = function () {
     if (inputDisplay.innerHTML != "" && !flag) {
       var deleted = tokens.pop();
-      if ('e^'.indexOf(deleted) >= 0) {
+      if ('e^(, ^(, √('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 2);
-      } else if ('Ans, mod, 10^, ln('.indexOf(deleted) >= 0) {
+      } else if ('Ans, mod, 10^(, ln('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 3);
       } else if ('<sub>x10^</sub>, sin(, cos(, tan(, log('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 4);
@@ -97,7 +96,8 @@ function InitApp() {
     var stack = [];
     try {
       Expr();
-      if (stack.length > 0) Ans = stack.pop(); else throw 'Unexpected Error';
+      // Ans = stack.pop();
+      if (stack.length == 1) Ans = stack.pop(); else throw 'Unexpected Error';
       resultDisplay.innerHTML = lookahead == "</>" ? Ans : err;
     }
     catch (err) {
@@ -108,45 +108,126 @@ function InitApp() {
     }
 
     function Expr() {
-      Term();
+      Term1();
       while (true) {
         if (lookahead == '+') {
           Match('+');
-          Term();
-          Solve('+');
+          Term1();
+          SolveBinary('+');
         }
         else if (lookahead == '-') {
           Match('-');
-          Term();
-          Solve('-');
+          Term1();
+          SolveBinary('-');
         }
         else return;
       }
     }
 
-    function Term() {
-      Factor();
+    function Term1() {
+      Term2();
       while (true) {
         if (lookahead == '*') {
           Match('*');
-          Factor();
-          Solve('*');
+          Term2();
+          SolveBinary('*');
         }
         else if (lookahead == '/') {
           Match('/');
-          Factor();
-          Solve('/');
+          Term2();
+          SolveBinary('/');
+        } else if (lookahead == 'mod') {
+          Match('mod');
+          Term2();
+          SolveBinary('mod');
         }
         else if (lookahead == '<sub>x10^</sub>') {
           Match('<sub>x10^</sub>');
-          Factor();
-          Solve('<sub>x10^</sub>');
+          Term2();
+          SolveBinary('<sub>x10^</sub>');
         }
         else return;
+      }
+    }
+
+    function Term2() {
+      Unary();
+      while (true) {
+        if (lookahead == '^(') {
+          Match('^(');
+          Unary();
+          if (lookahead == ')') Match(')');
+          SolveBinary('^(');
+        }
+        else return;
+      }
+    }
+
+    function Unary() {
+      if (lookahead == '√(') {
+        Match('√(');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('√(');
+      } else if (lookahead == 'sin(') {
+        Match('sin(');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('sin(');
+      } else if (lookahead == 'cos(') {
+        Match('cos(');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('cos(');
+      } else if (lookahead == 'tan(') {
+        Match('tan(');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('tan(');
+      } else if (lookahead == 'asin(') {
+        Match('asin(');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('asin(');
+      } else if (lookahead == 'acos(') {
+        Match('acos(');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('acos(');
+      } else if (lookahead == 'atan(') {
+        Match('atan(');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('atan(');
+      } else if (lookahead == 'ln(') {
+        Match('ln(');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('ln(');
+      } else if (lookahead == 'log(') {
+        Match('log(');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('log(');
+      } else if (lookahead == '10^(') {
+        Match('10^(');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('10^(');
+      } else if (lookahead == 'e^()') {
+        Match('e^()');
+        Unary();
+        if (lookahead == ')') Match(')');
+        SolveUnary('e^()');
+      }
+      else {
+        Factor();
+        return;
       }
     }
 
     function Factor() {
+
       var intlookahead = parseFloat(lookahead);
       if (!isNaN(intlookahead) || lookahead == "Ans") {
         stack.push(lookahead == "Ans" ? Ans : intlookahead);
@@ -158,6 +239,12 @@ function InitApp() {
         Match(')');
       }
       else throw "Syntax Error";
+      while (true) {
+        if (lookahead == '!') {
+          Match('!');
+          SolveUnary('!');
+        } else return;
+      }
     }
 
     function Match(t) {
@@ -166,7 +253,7 @@ function InitApp() {
       } else throw "Syntax Error";
     }
 
-    function Solve(operator) {
+    function SolveBinary(operator) {
       var secondOperand = stack.pop();
       var firstOperand = stack.pop();
       switch (operator) {
@@ -174,9 +261,53 @@ function InitApp() {
         case '-': stack.push(firstOperand - secondOperand); break;
         case '*': stack.push(firstOperand * secondOperand); break;
         case '/': stack.push(firstOperand / secondOperand); break;
+        case 'mod': stack.push(firstOperand % secondOperand); break;
+        case '^(': stack.push(Math.pow(firstOperand, secondOperand)); break;
+        case '√(': stack.push(Math.sqrt(firstOperand, secondOperand)); break;
         case '<sub>x10^</sub>': stack.push(firstOperand * Math.pow(10, secondOperand)); break;
         default: throw 'Invalid Operator';
       }
+    }
+
+    function SolveUnary(operator) {
+      var operand = stack.pop();
+      switch (operator) {
+        case '10^(': stack.push(Math.pow(10, operand)); break;
+        case 'e^()': stack.push(Math.exp(operand)); break;
+        case 'log(': stack.push(Math.log10(operand)); break;
+        case 'ln(': stack.push(Math.log(operand)); break;
+        case '√(': stack.push(Math.sqrt(operand)); break;
+        case '!': stack.push(Factorial(operand)); break;
+        case 'sin(': stack.push(Math.sin(ConvertToRadian(operand))); break;
+        case 'cos(': stack.push(Math.cos(ConvertToRadian(operand))); break;
+        case 'tan(': stack.push(Math.tan(ConvertToRadian(operand))); break;
+        case 'asin(': stack.push(ConvertToDegrees(Math.asin(operand))); break;
+        case 'acos(': stack.push(ConvertToDegrees(Math.acos(operand))); break;
+        case 'atan(': stack.push(ConvertToDegrees(Math.atan(operand))); break;
+        default: throw 'Invalid Operator';
+      }
+    }
+
+    function Factorial(n) {
+      var sum = 1;
+      if (typeof n == "number") {
+        if (n == 0 || n == 1) return sum;
+        else if (n < 0) throw 'Invalid Number';
+        else {
+          for (var i = 2; i <= n; i++) {
+            sum *= i;
+          }
+          return sum;
+        }
+      }
+    }
+
+    function ConvertToRadian(degrees) {
+      return degrees * Math.PI / 180;
+    }
+
+    function ConvertToDegrees(radians) {
+      return radians * 180 / Math.PI;
     }
   }
 
