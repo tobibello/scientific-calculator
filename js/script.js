@@ -46,10 +46,15 @@ function InitApp() {
   deleteBtn.onclick = function () {
     if (inputDisplay.innerHTML != "" && !flag) {
       var deleted = tokens.pop();
-      if (deleted == 'Ans') {
+      if ('e^'.indexOf(deleted) >= 0) {
+        inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 2);
+      } else if ('Ans, mod, 10^, ln('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 3);
-      } else if (deleted == '<sub>x10^</sub>') {
+      } else if ('<sub>x10^</sub>, sin(, cos(, tan(, log('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 4);
+      }
+      else if ('asin(, acos(, atan('.indexOf(deleted) >= 0) {
+        inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 5);
       }
       else {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 1);
