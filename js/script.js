@@ -45,7 +45,7 @@ function InitApp() {
   deleteBtn.onclick = function () {
     if (inputDisplay.innerHTML != "" && !flag) {
       var deleted = tokens.pop();
-      if(deleted=="("){
+      if (deleted == "(") {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 1);
       }
       else if ('e^(, ^(, √('.indexOf(deleted) >= 0) {
@@ -262,35 +262,47 @@ function InitApp() {
     function SolveBinary(operator) {
       var secondOperand = stack.pop();
       var firstOperand = stack.pop();
+      var result;
       switch (operator) {
-        case '+': stack.push(firstOperand + secondOperand); break;
-        case '-': stack.push(firstOperand - secondOperand); break;
-        case '*': stack.push(firstOperand * secondOperand); break;
-        case '/': stack.push(firstOperand / secondOperand); break;
-        case 'mod': stack.push(firstOperand % secondOperand); break;
-        case '^(': stack.push(Math.pow(firstOperand, secondOperand)); break;
-        case '√(': stack.push(Math.sqrt(firstOperand, secondOperand)); break;
-        case '<sub>x10^</sub>': stack.push(firstOperand * Math.pow(10, secondOperand)); break;
+        case '+': result = firstOperand + secondOperand; break;
+        case '-': result = firstOperand - secondOperand; break;
+        case '*': result = firstOperand * secondOperand; break;
+        case '/': result = firstOperand / secondOperand; break;
+        case 'mod': result = firstOperand % secondOperand; break;
+        case '^(': result = Math.pow(firstOperand, secondOperand); break;
+        case '√(': result = Math.sqrt(firstOperand, secondOperand); break;
+        case '<sub>x10^</sub>': result = firstOperand * Math.pow(10, secondOperand); break;
         default: throw 'Invalid Operator';
+      }
+      if (isFinite(result)) {
+        stack.push(result);
+      } else {
+        throw 'Math Error';
       }
     }
 
     function SolveUnary(operator) {
       var operand = stack.pop();
+      var result;
       switch (operator) {
-        case '10^(': stack.push(Math.pow(10, operand)); break;
-        case 'e^()': stack.push(Math.exp(operand)); break;
-        case 'log(': stack.push(Math.log10(operand)); break;
-        case 'ln(': stack.push(Math.log(operand)); break;
-        case '√(': stack.push(Math.sqrt(operand)); break;
-        case '!': stack.push(Factorial(operand)); break;
-        case 'sin(': stack.push(Math.sin(ConvertToRadian(operand))); break;
-        case 'cos(': stack.push(Math.cos(ConvertToRadian(operand))); break;
-        case 'tan(': stack.push(Math.tan(ConvertToRadian(operand))); break;
-        case 'asin(': stack.push(ConvertToDegrees(Math.asin(operand))); break;
-        case 'acos(': stack.push(ConvertToDegrees(Math.acos(operand))); break;
-        case 'atan(': stack.push(ConvertToDegrees(Math.atan(operand))); break;
+        case '10^(': result = Math.pow(10, operand); break;
+        case 'e^()': result = Math.exp(operand); break;
+        case 'log(': result = Math.log10(operand); break;
+        case 'ln(': result = Math.log(operand); break;
+        case '√(': result = Math.sqrt(operand); break;
+        case '!': result = Factorial(operand); break;
+        case 'sin(': result = Math.sin(ConvertToRadian(operand)); break;
+        case 'cos(': result = Math.cos(ConvertToRadian(operand)); break;
+        case 'tan(': result = Math.tan(ConvertToRadian(operand)); break;
+        case 'asin(': result = ConvertToDegrees(Math.asin(operand)); break;
+        case 'acos(': result = ConvertToDegrees(Math.acos(operand)); break;
+        case 'atan(': result = ConvertToDegrees(Math.atan(operand)); break;
         default: throw 'Invalid Operator';
+      }
+      if (isFinite(result)) {
+        stack.push(result);
+      } else {
+        throw 'Math Error';
       }
     }
 
