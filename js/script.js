@@ -50,9 +50,9 @@ function InitApp() {
       }
       else if ('^(, √('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 2);
-      } else if ('Ans, mod, 10^(, e^(, ln('.indexOf(deleted) >= 0) {
+      } else if ('Ans, mod, e^(, ln('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 3);
-      } else if ('<sub>x10^</sub>, sin(, cos(, tan(, log('.indexOf(deleted) >= 0) {
+      } else if ('<sub>x10^</sub>, sin(, cos(, tan(, log(, 10^('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 4);
       }
       else if ('asin(, acos(, atan('.indexOf(deleted) >= 0) {
