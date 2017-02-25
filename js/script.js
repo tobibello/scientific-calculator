@@ -99,8 +99,8 @@ function InitApp() {
     try {
       Expr();
       // Ans = stack.pop();
-      if (stack.length == 1) Ans = stack.pop(); else throw 'Unexpected Error';
-      resultDisplay.innerHTML = lookahead == "</>" ? Ans : err;
+      if (stack.length == 1 && lookahead == "</>") Ans = stack.pop(); else throw 'Syntax Error';
+      resultDisplay.innerHTML = Ans;
     }
     catch (err) {
       resultDisplay.innerHTML = err;
@@ -247,7 +247,7 @@ function InitApp() {
       else if (lookahead == '(') {
         Match('(');
         Expr();
-        Match(')');
+        if (lookahead == ')') Match(')');
       }
       else throw "Syntax Error";
     }
