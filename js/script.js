@@ -214,11 +214,11 @@ function InitApp() {
         Unary();
         if (lookahead == ')') Match(')');
         SolveUnary('10^(');
-      } else if (lookahead == 'e^()') {
-        Match('e^()');
+      } else if (lookahead == 'e^(') {
+        Match('e^(');
         Unary();
         if (lookahead == ')') Match(')');
-        SolveUnary('e^()');
+        SolveUnary('e^(');
       }
       else {
         Factor();
