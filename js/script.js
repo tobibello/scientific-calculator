@@ -221,8 +221,17 @@ function InitApp() {
         SolveUnary('e^(');
       }
       else {
-        Factor();
+        F();
         return;
+      }
+    }
+    function F() {
+      Factor();
+      while (true) {
+        if (lookahead == '!') {
+          Match('!');
+          SolveUnary('!');
+        } else return;
       }
     }
 
@@ -239,12 +248,6 @@ function InitApp() {
         Match(')');
       }
       else throw "Syntax Error";
-      while (true) {
-        if (lookahead == '!') {
-          Match('!');
-          SolveUnary('!');
-        } else return;
-      }
     }
 
     function Match(t) {
