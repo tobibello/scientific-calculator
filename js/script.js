@@ -48,9 +48,9 @@ function InitApp() {
       if (deleted == "(") {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 1);
       }
-      else if ('e^(, ^(, √('.indexOf(deleted) >= 0) {
+      else if ('^(, √('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 2);
-      } else if ('Ans, mod, 10^(, ln('.indexOf(deleted) >= 0) {
+      } else if ('Ans, mod, 10^(, e^(, ln('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 3);
       } else if ('<sub>x10^</sub>, sin(, cos(, tan(, log('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 4);
@@ -71,7 +71,6 @@ function InitApp() {
     inputDisplay.innerHTML = "";
     resultDisplay.innerHTML = "";
     tokens = ['0'];
-    Ans = 0;
     flag = false;
     inputDisplay.style.backgroundColor = '#86a2a5';
   }
@@ -286,7 +285,7 @@ function InitApp() {
       var result;
       switch (operator) {
         case '10^(': result = Math.pow(10, operand); break;
-        case 'e^()': result = Math.exp(operand); break;
+        case 'e^(': result = Math.exp(operand); break;
         case 'log(': result = Math.log10(operand); break;
         case 'ln(': result = Math.log(operand); break;
         case '√(': result = Math.sqrt(operand); break;
