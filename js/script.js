@@ -45,7 +45,10 @@ function InitApp() {
   deleteBtn.onclick = function () {
     if (inputDisplay.innerHTML != "" && !flag) {
       var deleted = tokens.pop();
-      if ('e^(, ^(, √('.indexOf(deleted) >= 0) {
+      if(deleted=="("){
+        inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 1);
+      }
+      else if ('e^(, ^(, √('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 2);
       } else if ('Ans, mod, 10^(, ln('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 3);
