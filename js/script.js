@@ -153,92 +153,19 @@ function InitApp() {
     }
 
     function Term2() {
-      Unary();
+      Factor();
       while (true) {
         if (lookahead == '^(') {
           Match('^(');
-          Unary();
+          Factor();
           if (lookahead == ')') Match(')');
           SolveBinary('^(');
         }
         else return;
       }
     }
-
-    function Unary() {
-      if (lookahead == '√(') {
-        Match('√(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('√(');
-      } else if (lookahead == 'sin(') {
-        Match('sin(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('sin(');
-      } else if (lookahead == 'cos(') {
-        Match('cos(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('cos(');
-      } else if (lookahead == 'tan(') {
-        Match('tan(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('tan(');
-      } else if (lookahead == 'asin(') {
-        Match('asin(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('asin(');
-      } else if (lookahead == 'acos(') {
-        Match('acos(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('acos(');
-      } else if (lookahead == 'atan(') {
-        Match('atan(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('atan(');
-      } else if (lookahead == 'ln(') {
-        Match('ln(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('ln(');
-      } else if (lookahead == 'log(') {
-        Match('log(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('log(');
-      } else if (lookahead == '10^(') {
-        Match('10^(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('10^(');
-      } else if (lookahead == 'e^(') {
-        Match('e^(');
-        Unary();
-        if (lookahead == ')') Match(')');
-        SolveUnary('e^(');
-      }
-      else {
-        F();
-        return;
-      }
-    }
-    function F() {
-      Factor();
-      while (true) {
-        if (lookahead == '!') {
-          Match('!');
-          SolveUnary('!');
-        } else return;
-      }
-    }
-
+    
     function Factor() {
-
       var intlookahead = parseFloat(lookahead);
       if (!isNaN(intlookahead) || lookahead == "Ans") {
         stack.push(lookahead == "Ans" ? Ans : intlookahead);
@@ -248,8 +175,69 @@ function InitApp() {
         Match('(');
         Expr();
         if (lookahead == ')') Match(')');
+      } else if (lookahead == '√(') {
+        Match('√(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('√(');
+      } else if (lookahead == 'sin(') {
+        Match('sin(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('sin(');
+      } else if (lookahead == 'cos(') {
+        Match('cos(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('cos(');
+      } else if (lookahead == 'tan(') {
+        Match('tan(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('tan(');
+      } else if (lookahead == 'asin(') {
+        Match('asin(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('asin(');
+      } else if (lookahead == 'acos(') {
+        Match('acos(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('acos(');
+      } else if (lookahead == 'atan(') {
+        Match('atan(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('atan(');
+      } else if (lookahead == 'ln(') {
+        Match('ln(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('ln(');
+      } else if (lookahead == 'log(') {
+        Match('log(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('log(');
+      } else if (lookahead == '10^(') {
+        Match('10^(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('10^(');
+      } else if (lookahead == 'e^(') {
+        Match('e^(');
+        Expr();
+        if (lookahead == ')') Match(')');
+        SolveUnary('e^(');
+      } else throw "Syntax Error";
+
+      while (true) {
+        if (lookahead == '!') {
+          Match('!');
+          SolveUnary('!');
+        } else return;
       }
-      else throw "Syntax Error";
     }
 
     function Match(t) {
