@@ -169,7 +169,7 @@ function InitApp() {
     
     function Factor() {
       var intlookahead = parseFloat(lookahead);
-      if (!isNaN(intlookahead) || lookahead == "Ans") {
+      if ((!isNaN(intlookahead) || lookahead == "Ans") && lookahead != "10^(") {
         stack.push(lookahead == "Ans" ? Ans : intlookahead);
         Match(lookahead);
       }
