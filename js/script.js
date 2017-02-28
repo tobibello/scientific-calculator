@@ -9,6 +9,8 @@ function InitApp() {
   var resetBtn = document.getElementById('reset');
   var calculateBtn = document.getElementById('equals');
 
+  var numbersOnlyRegex = /^-?\d+\.?\d*$/;
+
   inputDisplay.innerHTML = "";
   inputDisplay.style.backgroundColor = '#86a2a5';
   var tokens = ['0'];
@@ -168,8 +170,7 @@ function InitApp() {
     }
     
     function Factor() {
-      var intlookahead = parseFloat(lookahead);
-      if ((!isNaN(intlookahead) || lookahead == "Ans") && lookahead != "10^(") {
+      if ((numbersOnlyRegex.test(lookahead) || lookahead == "Ans") && lookahead != "10^(") {
         stack.push(lookahead == "Ans" ? Ans : intlookahead);
         Match(lookahead);
       }
