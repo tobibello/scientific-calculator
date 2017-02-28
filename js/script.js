@@ -9,7 +9,8 @@ function InitApp() {
   var resetBtn = document.getElementById('reset');
   var calculateBtn = document.getElementById('equals');
 
-  var numbersOnlyRegex = /^-?\d+\.?\d*$/;
+  var floatRegex = /^[-]?\d+\.?\d*$/;
+  var intRegex = /^[-]?\d+$/;
 
   inputDisplay.innerHTML = "";
   inputDisplay.style.backgroundColor = '#86a2a5';
@@ -170,8 +171,12 @@ function InitApp() {
     }
     
     function Factor() {
-      if ((numbersOnlyRegex.test(lookahead) || lookahead == "Ans") && lookahead != "10^(") {
-        stack.push(lookahead == "Ans" ? Ans : lookahead);
+      if ((floatRegex.test(lookahead) || lookahead == "Ans") && lookahead != "10^(") {
+        var n;
+        if(intRegex.test(lookahead)) n = parseInt(lookahead);
+        else if(floatRegex.test(lookahead)) n = parseFloat(lookahead);
+        else n = Ans;
+        stack.push(n);
         Match(lookahead);
       }
       else if (lookahead == '(') {
