@@ -171,7 +171,7 @@ function InitApp() {
     
     function Factor() {
       if ((numbersOnlyRegex.test(lookahead) || lookahead == "Ans") && lookahead != "10^(") {
-        stack.push(lookahead == "Ans" ? Ans : intlookahead);
+        stack.push(lookahead == "Ans" ? Ans : lookahead);
         Match(lookahead);
       }
       else if (lookahead == '(') {
