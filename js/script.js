@@ -178,10 +178,11 @@ function InitApp() {
     }
 
     function Factor() {
-      if ((floatRegex.test(lookahead) || lookahead == "Ans") && lookahead != "10^(") {
+      if ((floatRegex.test(lookahead) || lookahead == "Ans"||lookahead=='π') && lookahead != "10^(") {
         var n;
         if (intRegex.test(lookahead)) n = parseInt(lookahead);
         else if (floatRegex.test(lookahead)) n = parseFloat(lookahead);
+        else if(lookahead=='π') n = Math.PI;
         else n = Ans;
         stack.push(n);
         Match(lookahead);
