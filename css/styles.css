@@ -41,7 +41,7 @@ CALCULATOR
 table{
     width: 300px;
     margin: auto;
-    border-spacing:7px 10px;
+    border-spacing:5px 10px;
     border-radius: 5px;
     padding: 25px 10px 15px;
     box-shadow: 0 1px 0 #ccc,
@@ -92,10 +92,22 @@ thead td{
 }
 
 tbody td{
-    width: 16.66%;
+    width: 20%;
     height: 30px;
     padding:0;
     text-align: center;
+}
+tbody div{
+    height: 100%;
+    width:15%;
+    float:left;
+    margin: 0 1%;
+}
+tbody div:first-of-type{
+    margin-left:0;
+}
+tbody div:last-of-type{
+    margin-right:0;
 }
 
 tbody button{
@@ -110,8 +122,11 @@ tbody button{
                 2px 2px #222;
 }
 
-tbody tr:nth-child(-n+2) button, 
-tbody tr:nth-last-child(-n+4) td:first-of-type button{
+tbody button:focus{
+    outline: 0;
+}
+
+tbody tr:nth-child(-n+3) button{
     font-size: 15px;
 }
 
@@ -145,8 +160,7 @@ tbody button{
 tbody button:active{
     background-color: #73818c;
 }
-tbody tr:nth-child(-n+2) button, 
-tbody tr:nth-last-child(-n+4) td:first-of-type button{
+tbody tr:nth-child(-n+3) button{
     background-color: #616882;
 }
 
