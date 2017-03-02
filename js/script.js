@@ -29,11 +29,17 @@ function InitApp() {
           inputDisplay.style.backgroundColor = '#86a2a5';
         }
         inputDisplay.innerHTML += peek;
-        if (((!isNaN(parseInt(peek)) || peek == '.') && peek != "10^(")
+        if (((!isNaN(parseInt(peek)) || peek == '.' || peek == '-') && peek != "10^(")
           && tokens.length > 0
-          && ((!isNaN(parseInt(tokens[tokens.length - 1])) || tokens[tokens.length - 1] == '.') && tokens[tokens.length - 1] != "10^(")) {
-          var last = tokens.pop();
-          tokens.push(last + peek);
+          && ((!isNaN(parseInt(tokens[tokens.length - 1])) || tokens[tokens.length - 1] == '.' || tokens[tokens.length - 1] == '-') && tokens[tokens.length - 1] != "10^(")) {
+          if (tokens.length == 1 && tokens[0] == '0' && peek == '-') { 
+            tokens.pop();
+            tokens.push(peek);
+          }
+          else {
+            var last = tokens.pop();
+            tokens.push(last + peek);
+          }
         }
         else {
           if (tokens.length == 1 && tokens[0] == '0') {
@@ -60,10 +66,11 @@ function InitApp() {
       }
       else if ('asin(, acos(, atan('.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 5);
-      }else if ('<sub>x10^</sub>'.indexOf(deleted) >= 0) {
+      } else if ('<sup>_</sup>'.indexOf(deleted) >= 0) {
+        inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 12);
+      } else if ('<sub>x10^</sub>'.indexOf(deleted) >= 0) {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 15);
-      }
-      else {
+      } else {
         inputDisplay.innerHTML = inputDisplay.innerHTML.slice(0, inputDisplay.innerHTML.length - 1);
         if (!isNaN(parseInt(deleted)) && deleted.length > 1) {
           tokens.push(deleted.slice(0, deleted.length - 1));
@@ -122,10 +129,10 @@ function InitApp() {
           Term1();
           SolveBinary('+');
         }
-        else if (lookahead == '-') {
-          Match('-');
+        else if (lookahead == '<sup>_</sup>') {
+          Match('<sup>_</sup>');
           Term1();
-          SolveBinary('-');
+          SolveBinary('<sup>_</sup>');
         }
         else return;
       }
@@ -169,12 +176,12 @@ function InitApp() {
         else return;
       }
     }
-    
+
     function Factor() {
       if ((floatRegex.test(lookahead) || lookahead == "Ans") && lookahead != "10^(") {
         var n;
-        if(intRegex.test(lookahead)) n = parseInt(lookahead);
-        else if(floatRegex.test(lookahead)) n = parseFloat(lookahead);
+        if (intRegex.test(lookahead)) n = parseInt(lookahead);
+        else if (floatRegex.test(lookahead)) n = parseFloat(lookahead);
         else n = Ans;
         stack.push(n);
         Match(lookahead);
@@ -260,7 +267,7 @@ function InitApp() {
       var result;
       switch (operator) {
         case '+': result = firstOperand + secondOperand; break;
-        case '-': result = firstOperand - secondOperand; break;
+        case '<sup>_</sup>': result = firstOperand - secondOperand; break;
         case '*': result = firstOperand * secondOperand; break;
         case '/': result = firstOperand / secondOperand; break;
         case 'mod': result = firstOperand % secondOperand; break;
