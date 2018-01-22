@@ -1,0 +1,23 @@
+{
+  "name": "scientific-calculator",
+  "version": "1.0.0",
+  "description": "Scientific Calculator Web Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tobibello001/scientific-calculator.git"
+  },
+  "keywords": [
+    "calculator",
+    "javascript"
+  ],
+  "author": "Tobi Bello",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tobibello001/scientific-calculator/issues"
+  },
+  "homepage": "https://github.com/tobibello001/scientific-calculator#readme"
+}
